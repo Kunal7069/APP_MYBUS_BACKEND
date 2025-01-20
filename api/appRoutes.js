@@ -35,6 +35,45 @@ router.get("/get_bus_stations", async (req, res) => {
   }
 });
 
+router.get("/get_all_bus_stations", async (req, res) => {
+  try {
+    const collection = db.collection("BUS_STATIONS");
+    const result = await collection.find({}).toArray();
+    res.send(result);
+  } catch (error) {
+    res.status(500).json({ message: "Error getting data", error });
+  }
+});
+
+router.post("/update_users", async (req, res) => {
+  try {
+    const { name, gender, phone, email, dob, state, city } = req.body;
+    if (!phone) {
+      return res.status(400).json({ message: "Phone number is required" });
+    }
+    const collection = db.collection("USERS");
+    const result = await collection.updateOne(
+      { phone }, // Filter: Match user by phone
+      {
+        $set: {
+          name,
+          gender,
+          email,
+          dob,
+          state,
+          city,
+        },
+      }
+    );
+    if (result.matchedCount === 0) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    res.status(200).json({ message: "User updated successfully", result });
+  } catch (error) {
+    res.status(500).json({ message: "Error updating data", error });
+  }
+});
+    
 router.get("/get_eloc", async (req, res) => {
   try {
     const collection = db.collection("BUS_STATION_ADDRESS");

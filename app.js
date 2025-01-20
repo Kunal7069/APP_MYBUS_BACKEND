@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 const express = require("express");
 const { MongoClient } = require("mongodb");
 const cors = require("cors");
@@ -11,9 +13,9 @@ app.use(cors({
 }));
 app.use(express.json());
 
-const port = 5000;
-const url = "mongodb+srv://TEST:12345@mubustest.yfyj3.mongodb.net/";
-const dbName = "RED-BUS";
+const port = process.env.PORT;
+const url = process.env.url;
+const dbName = process.env.dbName;
 
 let db;
 

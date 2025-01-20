@@ -1,16 +1,17 @@
+require('dotenv').config();
+
 const express = require("express");
 const jwt = require('jsonwebtoken');
 const router = express.Router();
 const axios = require("axios");
-
 
 module.exports = (db) => {
     
   // Signup API
   router.post('/signup', async (req, res) => {
     const { name, gender, email, phone } = req.body;
-    const ACCESS_TOKEN_SECRET = 'your_jwt_access_secret';
-    const REFRESH_TOKEN_SECRET = 'your_jwt_refresh_secret';
+    const ACCESS_TOKEN_SECRET = process.env.ACCESS_TOKEN_SECRET;
+    const REFRESH_TOKEN_SECRET = process.env.REFRESH_TOKEN_SECRET;
     const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     if (!emailRegex.test(email)) {
       return res.status(400).json({ error: 'Invalid email format' });
@@ -52,8 +53,8 @@ module.exports = (db) => {
 
   router.post('/login', async (req, res) => {
     const { phone } = req.body;
-    const ACCESS_TOKEN_SECRET = 'your_jwt_access_secret';
-    const REFRESH_TOKEN_SECRET = 'your_jwt_refresh_secret';
+    const ACCESS_TOKEN_SECRET = process.env.ACCESS_TOKEN_SECRET;
+    const REFRESH_TOKEN_SECRET = process.env.REFRESH_TOKEN_SECRET;
     // Validate phone number
     if (!phone || phone.length < 10) {
         return res.status(400).json({ error: 'Mobile number must be at least 10 digits' });
